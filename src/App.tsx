@@ -34,12 +34,20 @@ const App: React.FC = () => {
     );
   };
 
+  const handleTaskDeleted = (taskId: string) => {
+    setTasks((prevTasks) => prevTasks.filter((task) => task.id !== taskId));
+  };
+
   if (loading) return <p>Loading tasks...</p>;
 
   return (
     <main className="app-container">
       <h1>Task Manager</h1>
-      <TaskList tasks={tasks} onTaskUpdated={handleTaskUpdated} />
+      <TaskList
+        tasks={tasks}
+        onTaskUpdated={handleTaskUpdated}
+        onTaskDeleted={handleTaskDeleted}
+      />
       <AddTaskForm onTaskAdded={handleTaskAdded} />
     </main>
   );
