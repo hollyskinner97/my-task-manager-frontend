@@ -26,12 +26,20 @@ const App: React.FC = () => {
     setTasks((prevTasks) => [...prevTasks, newTask]);
   };
 
+  const handleTaskUpdated = (updatedTask: Task) => {
+    setTasks((prevTasks) =>
+      prevTasks.map((task) =>
+        task.id === updatedTask.id ? { ...task, ...updatedTask } : task
+      )
+    );
+  };
+
   if (loading) return <p>Loading tasks...</p>;
 
   return (
     <main className="app-container">
       <h1>Task Manager</h1>
-      <TaskList tasks={tasks} />
+      <TaskList tasks={tasks} onTaskUpdated={handleTaskUpdated} />
       <AddTaskForm onTaskAdded={handleTaskAdded} />
     </main>
   );
