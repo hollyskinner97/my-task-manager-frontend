@@ -1,11 +1,38 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import TaskList from "./components/TaskList";
+import AddTaskForm from "./components/AddTaskForm";
+import { fetchTasks } from "./utils/fetchTasks";
+import { Task } from "./types/Task";
 
 const App: React.FC = () => {
+  const [tasks, setTasks] = useState<Task[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+
+  useEffect(() => {
+    const loadTasks = async () => {
+      try {
+        const fetchedTasks = await fetchTasks();
+        setTasks(fetchedTasks);
+      } catch (err) {
+        console.error("Error fetching tasks", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    loadTasks();
+  }, []);
+
+  const handleTaskAdded = (newTask: Task) => {
+    setTasks((prevTasks) => [...prevTasks, newTask]);
+  };
+
+  if (loading) return <p>Loading tasks...</p>;
+
   return (
     <main className="app-container">
       <h1>Task Manager</h1>
-      <TaskList />
+      <TaskList tasks={tasks} />
+      <AddTaskForm onTaskAdded={handleTaskAdded} />
     </main>
   );
 };
