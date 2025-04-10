@@ -39,16 +39,25 @@ const App: React.FC = () => {
     setTasks((prevTasks) => prevTasks.filter((task) => task._id !== taskId));
   };
 
-  if (loading) return <p>Loading tasks...</p>;
+  if (loading)
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <p className="text-lg text-gray-500">Loading tasks...</p>
+      </div>
+    );
 
   return (
-    <main className="app-container">
-      <h1>Task Manager</h1>
-      <TaskList
-        tasks={tasks}
-        onTaskUpdated={handleTaskUpdated}
-        onTaskDeleted={handleTaskDeleted}
-      />
+    <main className="max-w-4xl mx-auto">
+      <h1 className="text-center text-indigo-600 mb-8">My Task Manager</h1>
+      {tasks.length === 0 ? (
+        <p className="text-center text-gray-500">No tasks yet...</p>
+      ) : (
+        <TaskList
+          tasks={tasks}
+          onTaskUpdated={handleTaskUpdated}
+          onTaskDeleted={handleTaskDeleted}
+        />
+      )}
       <AddTaskForm onTaskAdded={handleTaskAdded} />
     </main>
   );
