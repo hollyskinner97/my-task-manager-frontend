@@ -1,10 +1,11 @@
+import { ObjectId } from "mongodb";
 import { Task } from "../types/Task";
 import TaskItem from "./TaskItem";
 
 interface TaskListProps {
   tasks: Task[];
   onTaskUpdated: (updatedTask: Task) => void;
-  onTaskDeleted: (taskId: string) => void;
+  onTaskDeleted: (taskId: ObjectId) => void;
 }
 
 const TaskList: React.FC<TaskListProps> = ({
@@ -18,7 +19,7 @@ const TaskList: React.FC<TaskListProps> = ({
     <ul className="task-list">
       {tasks.map((task) => (
         <TaskItem
-          key={task.id}
+          key={task._id.toString()}
           task={task}
           onTaskUpdated={onTaskUpdated}
           onTaskDeleted={onTaskDeleted}

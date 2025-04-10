@@ -1,19 +1,18 @@
 import React from "react";
 import { Task } from "../types/Task";
 import { API_URL } from "../config";
+import { ObjectId } from "mongodb";
 
 interface Props {
   task: Task;
   onTaskUpdated: (updatedTask: Task) => void;
-  onTaskDeleted: (taskId: string) => void;
+  onTaskDeleted: (taskId: ObjectId) => void;
 }
 
 const TaskItem: React.FC<Props> = ({ task, onTaskUpdated, onTaskDeleted }) => {
   const handleStatusChange = async (completed: boolean) => {
-    const updatedTask = { ...task, completed };
-
     try {
-      const response = await fetch(`${API_URL}/${task.id}`, {
+      const response = await fetch(`${API_URL}/${task._id}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ completed }),
@@ -31,11 +30,11 @@ const TaskItem: React.FC<Props> = ({ task, onTaskUpdated, onTaskDeleted }) => {
 
   const handleDelete = async () => {
     try {
-      const response = await fetch(`${API_URL}/${task.id}`, {
+      const response = await fetch(`${API_URL}/${task._id}`, {
         method: "DELETE",
       });
       if (response.ok) {
-        onTaskDeleted(task.id);
+        onTaskDeleted(task._id);
       } else {
         console.error("Failed to delete task");
       }
