@@ -3,6 +3,7 @@ import TaskList from "./components/TaskList";
 import AddTaskForm from "./components/AddTaskForm";
 import { fetchTasks } from "./utils/fetchTasks";
 import { Task } from "./types/Task";
+import { ObjectId } from "mongodb";
 
 const App: React.FC = () => {
   const [tasks, setTasks] = useState<Task[]>([]);
@@ -29,13 +30,13 @@ const App: React.FC = () => {
   const handleTaskUpdated = (updatedTask: Task) => {
     setTasks((prevTasks) =>
       prevTasks.map((task) =>
-        task.id === updatedTask.id ? { ...task, ...updatedTask } : task
+        task._id === updatedTask._id ? { ...task, ...updatedTask } : task
       )
     );
   };
 
-  const handleTaskDeleted = (taskId: string) => {
-    setTasks((prevTasks) => prevTasks.filter((task) => task.id !== taskId));
+  const handleTaskDeleted = (taskId: ObjectId) => {
+    setTasks((prevTasks) => prevTasks.filter((task) => task._id !== taskId));
   };
 
   if (loading) return <p>Loading tasks...</p>;
