@@ -13,10 +13,15 @@ const TaskList: React.FC<TaskListProps> = ({
   onTaskUpdated,
   onTaskDeleted,
 }) => {
-  if (!tasks.length) return <p>No tasks yet...</p>;
+  if (!tasks.length)
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <p className="text-lg text-gray-500">No tasks yet...</p>
+      </div>
+    );
 
   return (
-    <ul className="task-list">
+    <ul className="space-y-4">
       {tasks.map((task) => (
         <TaskItem
           key={task._id.toString()}
