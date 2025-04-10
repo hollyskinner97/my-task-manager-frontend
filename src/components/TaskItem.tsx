@@ -44,16 +44,29 @@ const TaskItem: React.FC<Props> = ({ task, onTaskUpdated, onTaskDeleted }) => {
   };
 
   return (
-    <li className="task-item">
-      <h3>{task.title}</h3>
-      <input
-        type="checkbox"
-        checked={task.completed}
-        onChange={(e) => handleStatusChange(e.target.checked)}
-      />
-      <small>{new Date(task.dateCreated).toLocaleString()}</small>
-      <button onClick={handleDelete}>Delete</button>
-    </li>
+    <div className="task-item flex items-center justify-between p-4 bg-white rounded-lg shadow-md hover:shadow-xl transition-all">
+      <div className="flex items-center space-x-4">
+        <input
+          type="checkbox"
+          checked={task.completed}
+          onChange={(e) => handleStatusChange(e.target.checked)}
+          className="w-6 h-6 rounded"
+        />
+        <h3
+          className={`text-lg ${
+            task.completed ? "line-through text-gray-400" : ""
+          }`}
+        >
+          {task.title}
+        </h3>
+      </div>
+      <button
+        onClick={handleDelete}
+        className="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600"
+      >
+        Delete
+      </button>
+    </div>
   );
 };
 
