@@ -1,7 +1,6 @@
 import { ObjectId } from "mongodb";
 import { Task } from "../types/Task";
 import TaskItem from "./TaskItem";
-import { useState } from "react";
 
 interface TaskListProps {
   tasks: Task[];
