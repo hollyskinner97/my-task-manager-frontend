@@ -35,18 +35,18 @@ const AddTaskForm: React.FC<AddTaskFormProps> = ({ onTaskAdded }) => {
   return (
     <form
       onSubmit={handleSubmit}
-      className="flex space-x-4 bg-white p-6 rounded-lg shadow-md mb-8"
+      className="flex flex-col sm:flex-row gap-4 items-stretch sm:items-center"
     >
       <input
         type="text"
         placeholder="New task..."
         value={title}
         onChange={(e) => setTitle(e.target.value)}
-        className="p-3 w-full border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+        className="flex-1"
       />
       <button
         type="submit"
-        className="px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 focus:ring-2 focus:ring-indigo-500"
+        className="bg-purple-500 hover:bg-purple-600 text-white"
       >
         Add Task
       </button>
