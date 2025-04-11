@@ -30,6 +30,22 @@ input[type="text"] {
   @apply rounded-lg border border-gray-400 px-4 py-2 shadow-lg shadow-gray-400/50 focus:outline-none focus:ring-2 focus:ring-purple-400;
 }
 
+@keyframes spin180 {
+  0% {
+    transform: rotate(0deg);
+  }
+  50% {
+    transform: rotate(180deg);
+  }
+  100% {
+    transform: rotate(180deg);
+  }
+}
+
+.spinner {
+  animation: spin180 1.7s ease-in-out infinite;
+}
+
 .firework {
   position: absolute;
   width: 8px;
