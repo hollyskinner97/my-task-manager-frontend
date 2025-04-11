@@ -1,93 +1,101 @@
-import React, { useRef, useState } from "react";
-import { Task } from "../types/Task";
+import React, { useState, useRef, useEffect } from "react";
 import { API_URL } from "../config";
-import { ObjectId } from "mongodb";
+import { Task } from "../types";
+import {
+  differenceInSeconds,
+  differenceInMinutes,
+  differenceInHours,
+  differenceInDays,
+  differenceInWeeks,
+} from "date-fns";
+import toLocalDatetimeString from "./utils/toLocalDatetimeString";
+import formatCountdown from "./utils/formatCountown";
 
-interface Props {
+type Props = {
   task: Task;
-  onTaskUpdated: (updatedTask: Task) => void;
-  onTaskDeleted: (taskId: ObjectId) => void;
-}
+  onTaskUpdated: (task: Task) => void;
+  onTaskDeleted: (taskId: string) => void;
+};
 
 const TaskItem: React.FC<Props> = ({ task, onTaskUpdated, onTaskDeleted }) => {
+  // State
   const [isEditing, setIsEditing] = useState(false);
   const [editedTitle, setEditedTitle] = useState(task.title);
+  const [showDeadlinePopup, setShowDeadlinePopup] = useState(false);
+  const [deadline, setDeadline] = useState<Date | null>(
+    task.deadline ? new Date(task.deadline) : null
+  );
+  const [savedDeadline, setSavedDeadline] = useState<Date | null>(
+    task.deadline ? new Date(task.deadline) : null
+  );
+  const [countdown, setCountdown] = useState("");
+  const [isValidDeadline, setIsValidDeadline] = useState(true);
 
-  const checkboxRef = useRef<HTMLInputElement>(null);
-  const containerRef = useRef<HTMLDivElement>(null);
+  // Refs
+  const checkboxRef = useRef<HTMLInputElement | null>(null);
+  const containerRef = useRef<HTMLDivElement | null>(null);
 
-  const triggerFireworks = () => {
-    const checkbox = checkboxRef.current;
-    const container = containerRef.current;
+  // Countdown
+  useEffect(() => {
+    let interval: number;
+    const updateCountdown = () => {
+      setCountdown(formatCountdown(savedDeadline));
+    };
 
-    if (!checkbox || !container) return;
+    if (savedDeadline) {
+      updateCountdown();
+      interval = setInterval(updateCountdown, 1000);
+    }
+    return () => clearInterval(interval);
+  }, [savedDeadline]);
 
-    const checkboxRect = checkbox.getBoundingClientRect();
-    const containerRect = container.getBoundingClientRect();
+  // Deadline validation
+  useEffect(() => {
+    if (!deadline) return setIsValidDeadline(false);
+    const now = new Date();
+    const minDiff = differenceInMinutes(deadline, now);
+    const maxDiff = differenceInWeeks(deadline, now);
+    setIsValidDeadline(minDiff >= 1 && maxDiff <= 52);
+  }, [deadline]);
 
-    const centerX =
-      checkboxRect.left + checkboxRect.width / 2 - containerRect.left;
-    const centerY =
-      checkboxRect.top + checkboxRect.height / 2 - containerRect.top;
+  const saveEditedTitle = async () => {
+    setIsEditing(false);
+    if (editedTitle !== task.title) {
+      onTaskUpdated({ ...task, title: editedTitle });
 
-    const colors = ["#ff4d6d", "#4dccff", "#ffe066", "#63e6be", "#845ef7"];
+      try {
+        const response = await fetch(`${API_URL}/${task._id}`, {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ title: editedTitle }),
+        });
 
-    for (let i = 0; i < 8; i++) {
-      const firework = document.createElement("div");
-      firework.className = "firework";
-
-      const color = colors[Math.floor(Math.random() * colors.length)];
-      firework.style.backgroundColor = color;
-
-      firework.style.left = `${centerX}px`;
-      firework.style.top = `${centerY}px`;
-      firework.style.setProperty("--angle", `${(360 / 8) * i}deg`);
-      container.appendChild(firework);
-
-      setTimeout(() => {
-        firework.remove();
-      }, 800);
+        if (response.ok) {
+          const updatedTask = await response.json();
+          onTaskUpdated(updatedTask);
+        }
+      } catch (err) {
+        console.error("Error updating title", err);
+      }
     }
   };
 
   const handleStatusChange = async (completed: boolean) => {
-    if (completed) triggerFireworks();
+    onTaskUpdated({ ...task, completed });
+
     try {
       const response = await fetch(`${API_URL}/${task._id}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ completed }),
       });
-      if (response.ok) {
-        const updatedTaskData = await response.json();
-        onTaskUpdated(updatedTaskData);
-      } else {
-        console.error("Failed to update task status");
-      }
-    } catch (err) {
-      console.error("Error updating task status", err);
-    }
-  };
-
-  const saveEditedTitle = async () => {
-    if (editedTitle.trim() === "" || editedTitle === task.title) {
-      setIsEditing(false);
-      return;
-    }
-    try {
-      const response = await fetch(`${API_URL}/${task._id}`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ title: editedTitle }),
-      });
 
       if (response.ok) {
         const updatedTask = await response.json();
         onTaskUpdated(updatedTask);
-        setIsEditing(false);
       }
     } catch (err) {
-      console.error("Error updating task title", err);
+      console.error("Error updating status", err);
     }
   };
 
@@ -96,13 +104,58 @@ const TaskItem: React.FC<Props> = ({ task, onTaskUpdated, onTaskDeleted }) => {
       const response = await fetch(`${API_URL}/${task._id}`, {
         method: "DELETE",
       });
+
       if (response.ok) {
         onTaskDeleted(task._id);
-      } else {
-        console.error("Failed to delete task");
       }
     } catch (err) {
       console.error("Error deleting task", err);
+    }
+  };
+
+  const handleDeadlineSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!deadline || !isValidDeadline) return;
+
+    setSavedDeadline(deadline);
+    setShowDeadlinePopup(false);
+    onTaskUpdated({ ...task, deadline: deadline.toISOString() as any });
+
+    try {
+      const response = await fetch(`${API_URL}/${task._id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ deadline }),
+      });
+
+      if (response.ok) {
+        const updatedTask = await response.json();
+        onTaskUpdated(updatedTask);
+      }
+    } catch (err) {
+      console.error("Error updating deadline", err);
+    }
+  };
+
+  const handleRemoveDeadline = async () => {
+    setSavedDeadline(null);
+    setDeadline(null);
+    setShowDeadlinePopup(false);
+    onTaskUpdated({ ...task, deadline: null });
+
+    try {
+      const response = await fetch(`${API_URL}/${task._id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ deadline: null }),
+      });
+
+      if (response.ok) {
+        const updatedTask = await response.json();
+        onTaskUpdated(updatedTask);
+      }
+    } catch (err) {
+      console.error("Error removing deadline", err);
     }
   };
 
@@ -115,7 +168,6 @@ const TaskItem: React.FC<Props> = ({ task, onTaskUpdated, onTaskDeleted }) => {
         <input
           ref={checkboxRef}
           type="checkbox"
-          title="Tick to mark completed task"
           checked={task.completed}
           onChange={(e) => handleStatusChange(e.target.checked)}
           className="w-5 h-5 accent-purple-500"
@@ -129,11 +181,7 @@ const TaskItem: React.FC<Props> = ({ task, onTaskUpdated, onTaskDeleted }) => {
             autoFocus
             onChange={(e) => setEditedTitle(e.target.value)}
             onBlur={saveEditedTitle}
-            onKeyDown={(e) => {
-              if (e.key === "Enter") {
-                saveEditedTitle();
-              }
-            }}
+            onKeyDown={(e) => e.key === "Enter" && saveEditedTitle()}
           />
         ) : (
           <h3
@@ -147,13 +195,79 @@ const TaskItem: React.FC<Props> = ({ task, onTaskUpdated, onTaskDeleted }) => {
           </h3>
         )}
       </div>
-      <button
-        onClick={handleDelete}
-        className="bg-white-400 hover:bg-red-100 text-white px-3 py-1 rounded-md"
-        title="Delete task"
-      >
-        ❌
-      </button>
+
+      <div className="flex items-center gap-2">
+        {savedDeadline && (
+          <span className="text-sm text-purple-600 font-mono max-w-[60px]">
+            {countdown}
+          </span>
+        )}
+
+        {showDeadlinePopup && (
+          <form
+            onSubmit={handleDeadlineSubmit}
+            className="absolute bg-white shadow-lg rounded-md p-3 top-full right-4 z-10"
+          >
+            <label className="block mb-1 text-sm font-medium text-gray-700">
+              Set Deadline:
+              <input
+                type="datetime-local"
+                className="block mt-1 border border-gray-300 rounded-md p-1"
+                value={deadline ? toLocalDatetimeString(deadline) : ""}
+                onChange={(e) => setDeadline(new Date(e.target.value))}
+              />
+            </label>
+            <div className="flex justify-between items-center mt-2 gap-2">
+              <button
+                type="button"
+                onClick={handleRemoveDeadline}
+                className="text-sm text-red-500 hover:text-red-700"
+              >
+                Remove
+              </button>
+              <div className="flex gap-2">
+                <button
+                  type="button"
+                  onClick={() => setShowDeadlinePopup(false)}
+                  className="text-sm text-gray-500"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  disabled={!isValidDeadline}
+                  className={`text-sm font-medium px-2 rounded-md ${
+                    isValidDeadline
+                      ? "text-purple-600 hover:text-white hover:bg-purple-600"
+                      : "text-gray-400 cursor-not-allowed"
+                  }`}
+                >
+                  Save
+                </button>
+              </div>
+            </div>
+          </form>
+        )}
+        <button
+          title="Set deadline"
+          onClick={() => setShowDeadlinePopup(true)}
+          className={`text-xl transition-colors duration-200 ${
+            savedDeadline
+              ? "text-purple-500 hover:bg-purple-100"
+              : "text-gray-400 hover:bg-gray-100"
+          } px-2 py-1 rounded-md`}
+        >
+          ⏳
+        </button>
+
+        <button
+          onClick={handleDelete}
+          className="hover:bg-red-100 text-white px-3 py-1 rounded-md"
+          title="Delete task"
+        >
+          ❌
+        </button>
+      </div>
     </div>
   );
 };
