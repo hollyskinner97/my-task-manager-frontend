@@ -44,17 +44,17 @@ const TaskItem: React.FC<Props> = ({ task, onTaskUpdated, onTaskDeleted }) => {
   };
 
   return (
-    <div className="task-item flex items-center justify-between p-4 bg-white rounded-lg shadow-md hover:shadow-xl transition-all">
-      <div className="flex items-center space-x-4">
+    <div className="flex items-center justify-between bg-white rounded-xl shadow-md p-4 border-l-8 border-purple-400">
+      <div className="flex items-center gap-4">
         <input
           type="checkbox"
           checked={task.completed}
           onChange={(e) => handleStatusChange(e.target.checked)}
-          className="w-6 h-6 rounded"
+          className="w-5 h-5 accent-purple-500"
         />
         <h3
           className={`text-lg ${
-            task.completed ? "line-through text-gray-400" : ""
+            task.completed ? "line-through text-gray-400" : "text-gray-900"
           }`}
         >
           {task.title}
@@ -62,9 +62,9 @@ const TaskItem: React.FC<Props> = ({ task, onTaskUpdated, onTaskDeleted }) => {
       </div>
       <button
         onClick={handleDelete}
-        className="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600"
+        className="bg-white-400 hover:bg-red-100 text-white px-3 py-1 rounded-md"
       >
-        Delete
+        ❌
       </button>
     </div>
   );
