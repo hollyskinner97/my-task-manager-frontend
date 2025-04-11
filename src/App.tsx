@@ -52,11 +52,19 @@ const App: React.FC = () => {
       {tasks.length === 0 ? (
         <p className="text-center text-gray-500">No tasks yet...</p>
       ) : (
-        <TaskList
-          tasks={tasks}
-          onTaskUpdated={handleTaskUpdated}
-          onTaskDeleted={handleTaskDeleted}
-        />
+        <div>
+          <p className="text-center mb-7">
+            Welcome to your new favourite task-managing app, helping you to stay
+            organised and get stuff done! Add tasks to your to-do list below,
+            set deadlines for yourself, and tick tasks off when they're
+            completed!
+          </p>
+          <TaskList
+            tasks={tasks}
+            onTaskUpdated={handleTaskUpdated}
+            onTaskDeleted={handleTaskDeleted}
+          />
+        </div>
       )}
       <AddTaskForm onTaskAdded={handleTaskAdded} />
     </main>
