@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import { Task } from "../types/Task";
 import { API_URL } from "../config";
 import { ObjectId } from "mongodb";
@@ -10,6 +10,9 @@ interface Props {
 }
 
 const TaskItem: React.FC<Props> = ({ task, onTaskUpdated, onTaskDeleted }) => {
+  const [isEditing, setIsEditing] = useState(false);
+  const [editedTitle, setEditedTitle] = useState(task.title);
+
   const checkboxRef = useRef<HTMLInputElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -66,6 +69,28 @@ const TaskItem: React.FC<Props> = ({ task, onTaskUpdated, onTaskDeleted }) => {
     }
   };
 
+  const saveEditedTitle = async () => {
+    if (editedTitle.trim() === "" || editedTitle === task.title) {
+      setIsEditing(false);
+      return;
+    }
+    try {
+      const response = await fetch(`${API_URL}/${task._id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ title: editedTitle }),
+      });
+
+      if (response.ok) {
+        const updatedTask = await response.json();
+        onTaskUpdated(updatedTask);
+        setIsEditing(false);
+      }
+    } catch (err) {
+      console.error("Error updating task title", err);
+    }
+  };
+
   const handleDelete = async () => {
     try {
       const response = await fetch(`${API_URL}/${task._id}`, {
@@ -90,21 +115,42 @@ const TaskItem: React.FC<Props> = ({ task, onTaskUpdated, onTaskDeleted }) => {
         <input
           ref={checkboxRef}
           type="checkbox"
+          title="Tick to mark completed task"
           checked={task.completed}
           onChange={(e) => handleStatusChange(e.target.checked)}
           className="w-5 h-5 accent-purple-500"
         />
-        <h3
-          className={`text-lg ${
-            task.completed ? "line-through text-gray-400" : "text-gray-900"
-          }`}
-        >
-          {task.title}
-        </h3>
+        {isEditing ? (
+          <input
+            className="text-lg border-b border-purple-300 focus:outline-none w-full"
+            style={{ minWidth: "40ch" }}
+            value={editedTitle}
+            maxLength={50}
+            autoFocus
+            onChange={(e) => setEditedTitle(e.target.value)}
+            onBlur={saveEditedTitle}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                saveEditedTitle();
+              }
+            }}
+          />
+        ) : (
+          <h3
+            className={`text-lg ${
+              task.completed ? "line-through text-gray-400" : "text-gray-900"
+            }`}
+            onClick={() => setIsEditing(true)}
+            title="Click to edit task title"
+          >
+            {task.title}
+          </h3>
+        )}
       </div>
       <button
         onClick={handleDelete}
         className="bg-white-400 hover:bg-red-100 text-white px-3 py-1 rounded-md"
+        title="Delete task"
       >
         ❌
       </button>
