@@ -47,8 +47,8 @@ const App: React.FC = () => {
     );
 
   return (
-    <main className="max-w-4xl mx-auto">
-      <h1 className="text-center text-indigo-600 mb-8">My Task Manager</h1>
+    <main className="w-full max-w-3xl mx-auto bg-white bg-opacity-80 rounded-2xl shadow-2xl p-8 space-y-6">
+      <h1>🌈 My Task Manager 🌈</h1>
       {tasks.length === 0 ? (
         <p className="text-center text-gray-500">No tasks yet...</p>
       ) : (
