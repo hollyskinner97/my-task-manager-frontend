@@ -46,7 +46,7 @@ const AddTaskForm: React.FC<AddTaskFormProps> = ({ onTaskAdded }) => {
       />
       <button
         type="submit"
-        className="bg-purple-500 hover:bg-purple-600 text-white"
+        className="bg-purple-500 hover:bg-purple-400 text-white shadow-lg shadow-purple-400/50 focus:shadow-outline"
       >
         Add Task
       </button>
