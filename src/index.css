@@ -2,7 +2,7 @@
 
 /* Global styles */
 :root {
-  font-family: "Comic Neue", sans-serif, system-ui;
+  font-family: "Baloo 2", cursive, sans-serif;
   line-height: 1.6;
   font-weight: 400;
   color-scheme: light dark;
@@ -28,4 +28,29 @@ button {
 /* Input and form styling */
 input[type="text"] {
   @apply rounded-lg border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-purple-400;
+}
+
+.firework {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: hotpink; /* fallback */
+  animation: pop 0.8s ease-out forwards;
+  pointer-events: none;
+}
+
+@keyframes pop {
+  0% {
+    opacity: 1;
+    transform: translate(0, 0) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(
+        calc(50px * cos(var(--angle))),
+        calc(50px * sin(var(--angle)))
+      )
+      scale(0.5);
+  }
 }
