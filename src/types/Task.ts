@@ -8,4 +8,4 @@ export interface Task {
   completed: boolean;
 }
 
-// Same as in backend
+// Needs to be the same as the backend
