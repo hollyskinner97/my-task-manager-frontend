@@ -1,54 +1,35 @@
-# React + TypeScript + Vite
+# Task Manager Application
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This is the frontend of the Task Manager app, built with React, TypeScript and Tailwind CSS. It provides a user interface for managing tasks and interacting with the backend API.
 
-Currently, two official plugins are available:
+### Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **Create, Edit, and Delete Tasks:** Manage tasks by adding, modifying, and removing them.
+- **Deadline Management:** Users can set deadlines for tasks, which display live countdowns.
+- **Task Completion Toggle:** Tasks can be marked as completed, with a strikethrough effect.
+- **Egg Timer Animation:** The egg timer icon spins when a deadline is set.
 
-## Expanding the ESLint configuration
+### Technologies Used
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- **React:** JavaScript library for building user interfaces.
+- **TypeScript:** Adds static typing to JavaScript for better development experience.
+- **Tailwind CSS:** Utility-first CSS framework for fast styling.
+- **Date-fns:** Library for date manipulation, used to handle countdowns and deadline formatting.
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+### Installation
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+1. Clone the repository:
+   git clone https://github.com/your-username/my-task-manager-frontend
+   cd my-task-manager-frontend
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+2. Install dependencies:
+   npm install
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
-```
+3. Ensure you have the API URL in the `config.ts` file:
+   Example:
+   const API_URL = "http://localhost:3000/tasks";
+
+4. Run the app:
+   npm run dev
+
+### Enjoy!
