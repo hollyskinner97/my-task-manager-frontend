@@ -1,20 +1,15 @@
 import React, { useState, useRef, useEffect } from "react";
 import { API_URL } from "../config";
-import { Task } from "../types";
-import {
-  differenceInSeconds,
-  differenceInMinutes,
-  differenceInHours,
-  differenceInDays,
-  differenceInWeeks,
-} from "date-fns";
+import { Task } from "../types/Task";
+import { differenceInMinutes, differenceInWeeks } from "date-fns";
 import toLocalDatetimeString from "./utils/toLocalDatetimeString";
 import formatCountdown from "./utils/formatCountown";
+import { ObjectId } from "mongodb";
 
 type Props = {
   task: Task;
   onTaskUpdated: (task: Task) => void;
-  onTaskDeleted: (taskId: string) => void;
+  onTaskDeleted: (taskId: ObjectId) => void;
 };
 
 const TaskItem: React.FC<Props> = ({ task, onTaskUpdated, onTaskDeleted }) => {
@@ -253,17 +248,19 @@ const TaskItem: React.FC<Props> = ({ task, onTaskUpdated, onTaskDeleted }) => {
           onClick={() => setShowDeadlinePopup(true)}
           className={`text-xl transition-colors duration-200 ${
             savedDeadline
-              ? "text-purple-500 hover:bg-purple-100"
+              ? "text-purple-500 hover:bg-purple-100 spinner"
               : "text-gray-400 hover:bg-gray-100"
           } px-2 py-1 rounded-md`}
+          style={{ cursor: "grab" }}
         >
           ⏳
         </button>
 
         <button
+          className="hover:bg-red-100 px-2 py-1 rounded-md"
           onClick={handleDelete}
-          className="hover:bg-red-100 text-white px-3 py-1 rounded-md"
           title="Delete task"
+          style={{ cursor: "grab" }}
         >
           ❌
         </button>
