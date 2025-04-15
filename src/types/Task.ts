@@ -7,6 +7,7 @@ export interface Task {
   deadline?: string | null;
   inProgress?: boolean;
   completed: boolean;
+  userId: string;
 }
 
 // Needs to be the same as the backend
