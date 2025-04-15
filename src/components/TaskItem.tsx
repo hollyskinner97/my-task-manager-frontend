@@ -59,7 +59,7 @@ const TaskItem: React.FC<Props> = ({ task, onTaskUpdated, onTaskDeleted }) => {
       onTaskUpdated({ ...task, title: editedTitle });
 
       try {
-        const response = await fetch(`${API_URL}/${task._id}`, {
+        const response = await fetch(`${API_URL}/tasks/${task._id}`, {
           method: "PATCH",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ title: editedTitle }),
@@ -79,7 +79,7 @@ const TaskItem: React.FC<Props> = ({ task, onTaskUpdated, onTaskDeleted }) => {
     onTaskUpdated({ ...task, completed });
 
     try {
-      const response = await fetch(`${API_URL}/${task._id}`, {
+      const response = await fetch(`${API_URL}/tasks/${task._id}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ completed }),
@@ -96,7 +96,7 @@ const TaskItem: React.FC<Props> = ({ task, onTaskUpdated, onTaskDeleted }) => {
 
   const handleDelete = async () => {
     try {
-      const response = await fetch(`${API_URL}/${task._id}`, {
+      const response = await fetch(`${API_URL}/tasks/${task._id}`, {
         method: "DELETE",
       });
 
@@ -117,7 +117,7 @@ const TaskItem: React.FC<Props> = ({ task, onTaskUpdated, onTaskDeleted }) => {
     onTaskUpdated({ ...task, deadline: deadline.toISOString() as any });
 
     try {
-      const response = await fetch(`${API_URL}/${task._id}`, {
+      const response = await fetch(`${API_URL}/tasks/${task._id}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ deadline }),
@@ -139,7 +139,7 @@ const TaskItem: React.FC<Props> = ({ task, onTaskUpdated, onTaskDeleted }) => {
     onTaskUpdated({ ...task, deadline: null });
 
     try {
-      const response = await fetch(`${API_URL}/${task._id}`, {
+      const response = await fetch(`${API_URL}/tasks/${task._id}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ deadline: null }),
