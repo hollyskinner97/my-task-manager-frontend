@@ -9,18 +9,17 @@ import { useAuth } from "./context/AuthContext";
 const App: React.FC = () => {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
+  const { token } = useAuth();
 
   useEffect(() => {
     const loadTasks = async () => {
-      const { token } = useAuth();
-
       if (!token) {
         console.error("No token found");
         return;
       }
 
       try {
-        const fetchedTasks = await fetchTasks();
+        const fetchedTasks = await fetchTasks(token);
         setTasks(fetchedTasks);
       } catch (err) {
         console.error("Error fetching tasks", err);
