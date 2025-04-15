@@ -1,7 +1,11 @@
 import { API_URL } from "../config";
 
-export async function fetchTasks() {
-  const response = await fetch(API_URL);
+export async function fetchTasks(token: string) {
+  const response = await fetch(`${API_URL}/tasks`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
   if (!response.ok) {
     throw new Error("Failed to fetch tasks");
   }
