@@ -4,6 +4,7 @@ import AddTaskForm from "./components/AddTaskForm";
 import { fetchTasks } from "./utils/fetchTasks";
 import { Task } from "./types/Task";
 import { ObjectId } from "mongodb";
+import { useAuth } from "./context/AuthContext";
 
 const App: React.FC = () => {
   const [tasks, setTasks] = useState<Task[]>([]);
@@ -11,6 +12,13 @@ const App: React.FC = () => {
 
   useEffect(() => {
     const loadTasks = async () => {
+      const { token } = useAuth();
+
+      if (!token) {
+        console.error("No token found");
+        return;
+      }
+
       try {
         const fetchedTasks = await fetchTasks();
         setTasks(fetchedTasks);
