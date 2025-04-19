@@ -9,7 +9,7 @@ import Header from "./components/Header";
 
 const App: React.FC = () => {
   return (
-    <Router>
+    <>
       <Header />
       <Routes>
         <Route path="/" element={<Welcome />} />
@@ -24,7 +24,7 @@ const App: React.FC = () => {
           }
         />
       </Routes>
-    </Router>
+    </>
   );
 };
 
