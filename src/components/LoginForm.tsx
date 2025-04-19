@@ -37,21 +37,32 @@ const Login: React.FC = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form
+      onSubmit={handleSubmit}
+      className="bg-white shadow-md rounded-2xl p-8 w-full max-w-md space-y-4"
+    >
+      <h2 className="text-2xl font-semibold text-center mb-6">Login</h2>
       <input
         type="email"
         placeholder="Email"
+        className="w-full p-2 border border-gray-300 rounded-xl"
         value={email}
         onChange={(e) => setEmail(e.target.value)}
       />
       <input
         type="password"
         placeholder="Password"
+        className="w-full p-2 border border-gray-300 rounded-xl"
         value={password}
         onChange={(e) => setPassword(e.target.value)}
       />
-      <button type="submit">Login</button>
-      {error && <p>{error}</p>}
+      <button
+        type="submit"
+        className="w-full bg-purple-600 text-white py-2 rounded-xl hover:bg-purple-700"
+      >
+        Login
+      </button>
+      {error && <p className="text-red-600 text-center">{error}</p>}
     </form>
   );
 };

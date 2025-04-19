@@ -36,37 +36,35 @@ const RegisterForm: React.FC = () => {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100 px-4">
-      <form
-        onSubmit={handleSubmit}
-        className="bg-white shadow-md rounded-2xl p-8 w-full max-w-md space-y-4"
+    <form
+      onSubmit={handleSubmit}
+      className="bg-white shadow-md rounded-2xl p-8 w-full max-w-md space-y-4"
+    >
+      <h2 className="text-2xl font-semibold text-center mb-6">
+        Create an account
+      </h2>
+      <input
+        type="email"
+        placeholder="Email"
+        className="w-full p-2 border border-gray-300 rounded-xl"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+      />
+      <input
+        type="password"
+        placeholder="Password"
+        className="w-full p-2 border border-gray-300 rounded-xl"
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+      />
+      <button
+        type="submit"
+        className="w-full bg-purple-600 text-white py-2 rounded-xl hover:bg-purple-700"
       >
-        <h2 className="text-2xl font-semibold text-center">
-          Create an account
-        </h2>
-        <input
-          type="email"
-          placeholder="Email"
-          className="w-full p-2 border border-gray-300 rounded-xl"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
-        <input
-          type="password"
-          placeholder="Password"
-          className="w-full p-2 border border-gray-300 rounded-xl"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-        <button
-          type="submit"
-          className="w-full bg-purple-600 text-white py-2 rounded-xl hover:bg-purple-700"
-        >
-          Register
-        </button>
-        {error && <p className="text-red-600 text-center">{error}</p>}
-      </form>
-    </div>
+        Register
+      </button>
+      {error && <p className="text-red-600 text-center">{error}</p>}
+    </form>
   );
 };
 
