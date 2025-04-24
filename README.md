@@ -2,12 +2,15 @@
 
 This is the frontend of the Task Manager app, built with React, TypeScript and Tailwind CSS. It provides a user interface for managing tasks and interacting with the backend API.
 
+The backend API can be found at: https://github.com/hollyskinner97/my-task-manager-backend
+
 ### Features
 
+- **Full authorisation:** Users must register and log in, in order to use the app and its features.
 - **Create, Edit, and Delete Tasks:** Manage tasks by adding, modifying, and removing them.
 - **Deadline Management:** Users can set deadlines for tasks, which display live countdowns.
 - **Task Completion Toggle:** Tasks can be marked as completed, with a strikethrough effect.
-- **Egg Timer Animation:** The egg timer icon spins when a deadline is set.
+- **Egg Timer Animation:** The egg timer icon spins when a deadline is set and hasn't yet expired.
 
 ### Technologies Used
 
@@ -27,7 +30,7 @@ This is the frontend of the Task Manager app, built with React, TypeScript and T
 
 3. Ensure you have the API URL in the `config.ts` file:
    Example:
-   const API_URL = "http://localhost:3000/tasks";
+   const API_URL = "http://localhost:3000";
 
 4. Run the app:
    npm run dev
