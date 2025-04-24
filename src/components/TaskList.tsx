@@ -6,12 +6,14 @@ interface TaskListProps {
   tasks: Task[];
   onTaskUpdated: (updatedTask: Task) => void;
   onTaskDeleted: (taskId: ObjectId) => void;
+  token: string | null;
 }
 
 const TaskList: React.FC<TaskListProps> = ({
   tasks,
   onTaskUpdated,
   onTaskDeleted,
+  token,
 }) => {
   if (!tasks.length)
     return (
@@ -28,6 +30,7 @@ const TaskList: React.FC<TaskListProps> = ({
           task={task}
           onTaskUpdated={onTaskUpdated}
           onTaskDeleted={onTaskDeleted}
+          token={token}
         />
       ))}
     </ul>

@@ -10,9 +10,15 @@ type Props = {
   task: Task;
   onTaskUpdated: (task: Task) => void;
   onTaskDeleted: (taskId: ObjectId) => void;
+  token: string | null;
 };
 
-const TaskItem: React.FC<Props> = ({ task, onTaskUpdated, onTaskDeleted }) => {
+const TaskItem: React.FC<Props> = ({
+  task,
+  onTaskUpdated,
+  onTaskDeleted,
+  token,
+}) => {
   // State
   const [isEditing, setIsEditing] = useState(false);
   const [editedTitle, setEditedTitle] = useState(task.title);
@@ -61,7 +67,10 @@ const TaskItem: React.FC<Props> = ({ task, onTaskUpdated, onTaskDeleted }) => {
       try {
         const response = await fetch(`${API_URL}/tasks/${task._id}`, {
           method: "PATCH",
-          headers: { "Content-Type": "application/json" },
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
           body: JSON.stringify({ title: editedTitle }),
         });
 
@@ -81,7 +90,10 @@ const TaskItem: React.FC<Props> = ({ task, onTaskUpdated, onTaskDeleted }) => {
     try {
       const response = await fetch(`${API_URL}/tasks/${task._id}`, {
         method: "PATCH",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
         body: JSON.stringify({ completed }),
       });
 
@@ -98,6 +110,9 @@ const TaskItem: React.FC<Props> = ({ task, onTaskUpdated, onTaskDeleted }) => {
     try {
       const response = await fetch(`${API_URL}/tasks/${task._id}`, {
         method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       });
 
       if (response.ok) {
@@ -119,7 +134,10 @@ const TaskItem: React.FC<Props> = ({ task, onTaskUpdated, onTaskDeleted }) => {
     try {
       const response = await fetch(`${API_URL}/tasks/${task._id}`, {
         method: "PATCH",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
         body: JSON.stringify({ deadline }),
       });
 
@@ -141,7 +159,10 @@ const TaskItem: React.FC<Props> = ({ task, onTaskUpdated, onTaskDeleted }) => {
     try {
       const response = await fetch(`${API_URL}/tasks/${task._id}`, {
         method: "PATCH",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
         body: JSON.stringify({ deadline: null }),
       });
 

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { API_URL } from "../config";
 import { Task } from "../types/Task";
+import { useAuth } from "../context/AuthContext";
 
 interface AddTaskFormProps {
   onTaskAdded: (newTask: Task) => void;
@@ -8,15 +9,19 @@ interface AddTaskFormProps {
 
 const AddTaskForm: React.FC<AddTaskFormProps> = ({ onTaskAdded }) => {
   const [title, setTitle] = useState("");
+  const { token } = useAuth();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!title.trim()) return;
 
     try {
-      const response = await fetch(API_URL, {
+      const response = await fetch(`${API_URL}/tasks`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
         body: JSON.stringify({ title }),
       });
 
