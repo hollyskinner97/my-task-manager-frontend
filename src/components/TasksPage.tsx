@@ -5,7 +5,6 @@ import { fetchTasks } from "../utils/fetchTasks";
 import { Task } from "../types/Task";
 import { ObjectId } from "mongodb";
 import { useAuth } from "../context/AuthContext";
-import LogoutButton from "./LogoutButton";
 
 const TasksPage: React.FC = () => {
   const [tasks, setTasks] = useState<Task[]>([]);
@@ -56,20 +55,20 @@ const TasksPage: React.FC = () => {
 
   return (
     <main className="w-full max-w-3xl mx-auto bg-white bg-opacity-80 rounded-2xl shadow-2xl p-8 space-y-6">
+      <p className="text-center mb-7">
+        Welcome to your new favourite task-managing app, helping you to stay
+        organised and get stuff done! Add tasks to your to-do list below, set
+        deadlines for yourself, and tick tasks off when they're completed!
+      </p>
       {tasks.length === 0 ? (
         <p className="text-center text-gray-500">No tasks yet...</p>
       ) : (
         <div>
-          <p className="text-center mb-7">
-            Welcome to your new favourite task-managing app, helping you to stay
-            organised and get stuff done! Add tasks to your to-do list below,
-            set deadlines for yourself, and tick tasks off when they're
-            completed!
-          </p>
           <TaskList
             tasks={tasks}
             onTaskUpdated={handleTaskUpdated}
             onTaskDeleted={handleTaskDeleted}
+            token={token}
           />
         </div>
       )}
