@@ -13,7 +13,7 @@ body {
 }
 
 h1 {
-  @apply text-4xl md:text-5xl font-bold text-purple-600 mb-6 text-center;
+  @apply text-4xl md:text-5xl font-bold text-purple-600 mt-4 mb-4 text-center;
 }
 
 a {
@@ -22,7 +22,7 @@ a {
 
 /* Button styles */
 button {
-  @apply font-bold rounded-lg px-4 py-2 transition-all duration-200 focus:outline-none;
+  @apply font-bold rounded-lg px-4 py-2 transition-all duration-200 focus:outline-none cursor-pointer;
   color: white;
 }
 
