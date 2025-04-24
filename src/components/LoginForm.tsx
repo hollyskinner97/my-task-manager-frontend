@@ -39,7 +39,7 @@ const Login: React.FC = () => {
   return (
     <form
       onSubmit={handleSubmit}
-      className="bg-white shadow-md rounded-2xl p-8 w-full max-w-md space-y-4"
+      className="bg-white shadow-md rounded-2xl p-8 w-full max-w-3xl mx-auto space-y-4"
     >
       <h2 className="text-2xl font-semibold text-center mb-6">Login</h2>
       <input
@@ -58,7 +58,7 @@ const Login: React.FC = () => {
       />
       <button
         type="submit"
-        className="w-full bg-purple-600 text-white py-2 rounded-xl hover:bg-purple-700"
+        className="w-full bg-purple-600 text-white py-2 rounded-xl hover:bg-purple-800"
       >
         Login
       </button>
